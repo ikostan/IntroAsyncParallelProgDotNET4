@@ -35,10 +35,11 @@
 					<Button Content="Price Option..." Padding="0,6,0,6" Width="150" Margin="0,12,0,10" FontSize="14" Grid.Row="0" Grid.Column="1" Name="cmdPriceOption" Click="cmdPriceOption_Click"/>
 					<fenestra:BizzySpinner Name="spinnerWait" Visibility="Collapsed" Width="36" Margin="12,12,0,10" />
 				</StackPanel>
-				<ListBox Name="lstPrices" FontSize="16" FontWeight="SemiBold" Height="160" Width="auto"  Margin="0,10,0,0" VerticalAlignment="Stretch" />
-			</StackPanel>
+                <Label Name="lblCount" FontSize="16" Width="40" Content="0" HorizontalContentAlignment="Center" />
 
-			<Expander Background="White" Grid.Row="0" Grid.Column="1" Margin="60,0,0,0" Header="Simulation Parameters:" IsExpanded="True">
+                <ListBox Name="lstPrices" FontSize="16" FontWeight="SemiBold" Height="160" Width="auto"  Margin="0,10,0,0" VerticalAlignment="Stretch" />
+			</StackPanel>
+            <Expander Background="White" Grid.Row="0" Grid.Column="1" Margin="60,0,0,0" Header="Simulation Parameters:" IsExpanded="True">
 				<Grid ShowGridLines="True" Background="Yellow" Margin="12,12,12,12">
 					<!-- 10 rows, 2 columns -->
 					<Grid.ColumnDefinitions>
