@@ -23,6 +23,9 @@ namespace AsianOptions
 	/// </summary>
 	public partial class MainWindow : Window
 	{
+        private int count = 0;
+
+
 		//
 		// Methods:
 		//
@@ -56,6 +59,9 @@ namespace AsianOptions
 		/// </summary>
 		private void cmdPriceOption_Click(object sender, RoutedEventArgs e)
 		{
+            count++;
+            lblCount.Content = count.ToString();
+
             //ButtonToggle();
 
             this.spinnerWait.Visibility = System.Windows.Visibility.Visible;
@@ -93,9 +99,15 @@ namespace AsianOptions
                 //
                 lstPrices.Items.Insert(0, result);
 
-                //ButtonToggle();
-                this.spinnerWait.Visibility = System.Windows.Visibility.Collapsed;
-                this.cmdPriceOption.IsEnabled = true;
+                count--;
+                lblCount.Content = count.ToString();
+
+                if (count == 0)
+                {
+                    //ButtonToggle();
+                    this.spinnerWait.Visibility = System.Windows.Visibility.Collapsed;
+                    this.cmdPriceOption.IsEnabled = true;
+                }
             },
             TaskScheduler.FromCurrentSynchronizationContext() //Run on the UI thread
             );
