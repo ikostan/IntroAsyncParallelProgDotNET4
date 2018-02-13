@@ -56,7 +56,10 @@ namespace AsianOptions
 		/// </summary>
 		private void cmdPriceOption_Click(object sender, RoutedEventArgs e)
 		{
-            ButtonToggle();
+            //ButtonToggle();
+
+            this.spinnerWait.Visibility = System.Windows.Visibility.Visible;
+            this.spinnerWait.Spin = true;
 
             //Config params
             double initial = Convert.ToDouble(txtInitialPrice.Text);
@@ -90,7 +93,9 @@ namespace AsianOptions
                 //
                 lstPrices.Items.Insert(0, result);
 
-                ButtonToggle();
+                //ButtonToggle();
+                this.spinnerWait.Visibility = System.Windows.Visibility.Collapsed;
+                this.cmdPriceOption.IsEnabled = true;
             },
             TaskScheduler.FromCurrentSynchronizationContext() //Run on the UI thread
             );
