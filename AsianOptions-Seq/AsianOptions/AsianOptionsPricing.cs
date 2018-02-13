@@ -27,7 +27,14 @@ namespace AsianOptions
 		/// <returns>The calculated value for an option with the given 
 		/// statistical context using the Monte Carlo method.</returns>
 		///
-		public static double Simulation(Random rand, double initial, double exercise, double up, double down, double interest, long periods, long sims)
+		public static double Simulation(Random rand, 
+                                        double initial, 
+                                        double exercise, 
+                                        double up, 
+                                        double down, 
+                                        double interest, 
+                                        long periods, 
+                                        long sims)
 		{
 			// Risk-neutral probabilities:
 			double piup = (interest - down) / (up - down);

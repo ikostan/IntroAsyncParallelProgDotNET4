@@ -4,11 +4,11 @@
 winexe
 C#
 .cs
-C:\Users\superadmin\Desktop\C#\IntroAsyncParallelProgDotNET4\AsianOptions-Seq\AsianOptions\obj\x86\Release\
+C:\Users\superadmin\Desktop\C#\IntroAsyncParallelProgDotNET4\AsianOptions-Seq\AsianOptions\obj\x86\Debug\
 AsianOptions
 none
 false
-TRACE
+DEBUG;TRACE
 C:\Users\superadmin\Desktop\C#\IntroAsyncParallelProgDotNET4\AsianOptions-Seq\AsianOptions\App.xaml
 11151548125
 

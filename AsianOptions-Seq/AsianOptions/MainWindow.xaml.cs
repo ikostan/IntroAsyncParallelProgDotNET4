@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO;
+using System.Threading.Tasks;
 
 
 namespace AsianOptions
@@ -60,6 +61,7 @@ namespace AsianOptions
 			this.spinnerWait.Visibility = System.Windows.Visibility.Visible;
 			this.spinnerWait.Spin = true;
 
+            //Config params
 			double initial = Convert.ToDouble(txtInitialPrice.Text);
 			double exercise = Convert.ToDouble(txtExercisePrice.Text);
 			double up = Convert.ToDouble(txtUpGrowth.Text);
@@ -68,31 +70,48 @@ namespace AsianOptions
 			long periods = Convert.ToInt64(txtPeriods.Text);
 			long sims = Convert.ToInt64(txtSimulations.Text);
 
-			//
-			// Run simulation to price option:
-			//
-			Random rand = new Random();
-			int start = System.Environment.TickCount;
+            //
+            // Run simulation to price option:
+            //
 
-			double price = AsianOptionsPricing.Simulation(rand, initial, exercise, up, down, interest, periods, sims);
+            string result = null;
 
-			int stop = System.Environment.TickCount;
+            //Create a separate task
+            Task T = new Task(() =>
+            {
 
-			double elapsedTimeInSecs = (stop - start) / 1000.0;
+                Random rand = new Random();
+                int start = System.Environment.TickCount;
 
-			string result = string.Format("{0:C}  [{1:#,##0.00} secs]",
-				price, elapsedTimeInSecs);
+                //The most heavy function
+                double price = AsianOptionsPricing.Simulation(rand, initial, exercise, up, down, interest, periods, sims);
 
-			//
-			// Display the results:
-			//
-			this.lstPrices.Items.Insert(0, result);
+                int stop = System.Environment.TickCount;
 
-			this.spinnerWait.Spin = false;
-			this.spinnerWait.Visibility = System.Windows.Visibility.Collapsed;
+                double elapsedTimeInSecs = (stop - start) / 1000.0;
 
-			this.cmdPriceOption.IsEnabled = true;
-		}
+                result = string.Format("{0:C}  [{1:#,##0.00} secs]",
+                    price, elapsedTimeInSecs);
+            });
+
+            Task T2 = T.ContinueWith((t) => {
+
+                //
+                // Display the results (UI thread):
+                //
+                this.lstPrices.Items.Insert(0, result);
+
+                this.spinnerWait.Spin = false;
+                this.spinnerWait.Visibility = System.Windows.Visibility.Collapsed;
+
+                this.cmdPriceOption.IsEnabled = true;
+            },
+            TaskScheduler.FromCurrentSynchronizationContext() //Run on the UI thread
+            );
+
+            //Start the task
+            T.Start();
+        }
 
 	}//class
 }//namespace
