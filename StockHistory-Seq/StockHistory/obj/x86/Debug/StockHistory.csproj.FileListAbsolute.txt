@@ -1,0 +1,6 @@
+C:\Users\superadmin\Desktop\C#\IntroAsyncParallelProgDotNET4\StockHistory-Seq\StockHistory\bin\Debug\StockHistory.exe
+C:\Users\superadmin\Desktop\C#\IntroAsyncParallelProgDotNET4\StockHistory-Seq\StockHistory\bin\Debug\StockHistory.pdb
+C:\Users\superadmin\Desktop\C#\IntroAsyncParallelProgDotNET4\StockHistory-Seq\StockHistory\obj\x86\Debug\StockHistory.csprojResolveAssemblyReference.cache
+C:\Users\superadmin\Desktop\C#\IntroAsyncParallelProgDotNET4\StockHistory-Seq\StockHistory\obj\x86\Debug\StockHistory.csproj.CoreCompileInputs.cache
+C:\Users\superadmin\Desktop\C#\IntroAsyncParallelProgDotNET4\StockHistory-Seq\StockHistory\obj\x86\Debug\StockHistory.exe
+C:\Users\superadmin\Desktop\C#\IntroAsyncParallelProgDotNET4\StockHistory-Seq\StockHistory\obj\x86\Debug\StockHistory.pdb

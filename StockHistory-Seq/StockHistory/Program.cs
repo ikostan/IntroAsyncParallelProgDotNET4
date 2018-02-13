@@ -5,6 +5,7 @@ using System.Text;
 
 using System.IO;
 using System.Net;
+using System.Threading.Tasks;
 
 
 //
@@ -64,9 +65,20 @@ namespace StockHistory
 
 				int N = data.Prices.Count;
 
-				decimal min = data.Prices.Min();
-				decimal max = data.Prices.Max();
-				decimal avg = data.Prices.Average();
+                decimal min = 0, max = 0, avg = 0;
+
+                //Create parallel tasks
+                Task t_Min = Task.Factory.StartNew(() => {
+                    min = data.Prices.Min();
+                });
+
+                Task t_Max = Task.Factory.StartNew(() => {
+                    max = data.Prices.Max();
+                });
+
+                Task t_Avg = Task.Factory.StartNew(() => {
+                    avg = data.Prices.Average();
+                });
 
 				// Standard deviation:
 				double sum = 0.0;
@@ -86,9 +98,16 @@ namespace StockHistory
 				Console.WriteLine("** {0} **", symbol);
 				Console.WriteLine("   Data source:  '{0}'", data.DataSource);
 				Console.WriteLine("   Data points:   {0:#,##0}", N);
+
+                t_Min.Wait(); //Wait until task is finished
 				Console.WriteLine("   Min price:    {0:C}", min);
-				Console.WriteLine("   Max price:    {0:C}", max);
-				Console.WriteLine("   Avg price:    {0:C}", avg);
+
+                t_Max.Wait(); //Wait until task is finished
+                Console.WriteLine("   Max price:    {0:C}", max);
+
+                t_Avg.Wait(); //Wait until task is finished
+                Console.WriteLine("   Avg price:    {0:C}", avg);
+
 				Console.WriteLine("   Std dev/err:   {0:0.000} / {1:0.000}", stddev, stderr);
 			}
 			catch (Exception ex)
