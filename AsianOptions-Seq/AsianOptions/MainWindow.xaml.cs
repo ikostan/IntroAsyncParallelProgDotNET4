@@ -56,13 +56,10 @@ namespace AsianOptions
 		/// </summary>
 		private void cmdPriceOption_Click(object sender, RoutedEventArgs e)
 		{
-			this.cmdPriceOption.IsEnabled = false;
-			
-			this.spinnerWait.Visibility = System.Windows.Visibility.Visible;
-			this.spinnerWait.Spin = true;
+            ButtonToggle();
 
             //Config params
-			double initial = Convert.ToDouble(txtInitialPrice.Text);
+            double initial = Convert.ToDouble(txtInitialPrice.Text);
 			double exercise = Convert.ToDouble(txtExercisePrice.Text);
 			double up = Convert.ToDouble(txtUpGrowth.Text);
 			double down = Convert.ToDouble(txtDownGrowth.Text);
@@ -79,21 +76,10 @@ namespace AsianOptions
             //Create a separate task
             Task T = new Task(() =>
             {
-
-                Random rand = new Random();
-                int start = System.Environment.TickCount;
-
-                //The most heavy function
-                double price = AsianOptionsPricing.Simulation(rand, initial, exercise, up, down, interest, periods, sims);
-
-                int stop = System.Environment.TickCount;
-
-                double elapsedTimeInSecs = (stop - start) / 1000.0;
-
-                result = string.Format("{0:C}  [{1:#,##0.00} secs]",
-                    price, elapsedTimeInSecs);
+                CalculationTask(initial, exercise, up, down, interest, periods, sims, out result);
             });
 
+            //Task for UI thread
             Task T2 = T.ContinueWith((t) => {
 
                 //
@@ -101,16 +87,67 @@ namespace AsianOptions
                 //
                 this.lstPrices.Items.Insert(0, result);
 
-                this.spinnerWait.Spin = false;
-                this.spinnerWait.Visibility = System.Windows.Visibility.Collapsed;
-
-                this.cmdPriceOption.IsEnabled = true;
+                ButtonToggle();
             },
             TaskScheduler.FromCurrentSynchronizationContext() //Run on the UI thread
             );
 
             //Start the task
             T.Start();
+        }
+
+        /// <summary>
+        /// Calculation method
+        /// </summary>
+        /// <param name="initial"></param>
+        /// <param name="exercise"></param>
+        /// <param name="up"></param>
+        /// <param name="down"></param>
+        /// <param name="interest"></param>
+        /// <param name="periods"></param>
+        /// <param name="sims"></param>
+        /// <param name="result"></param>
+        private void CalculationTask(double initial, 
+                                    double exercise, 
+                                    double up, 
+                                    double down, 
+                                    double interest, 
+                                    long periods, 
+                                    long sims, 
+                                    out string result) {
+
+            Random rand = new Random();
+            int start = System.Environment.TickCount;
+
+            //The most heavy function
+            double price = AsianOptionsPricing.Simulation(rand, initial, exercise, up, down, interest, periods, sims);
+
+            int stop = System.Environment.TickCount;
+
+            double elapsedTimeInSecs = (stop - start) / 1000.0;
+
+            result = string.Format("{0:C}  [{1:#,##0.00} secs]",
+                price, elapsedTimeInSecs);
+        }
+
+        /// <summary>
+        /// Disable/Enable calculation button.
+        /// Show/Hide spinning icon
+        /// </summary>
+        private void ButtonToggle()
+        {
+            if (this.cmdPriceOption.IsEnabled)
+            {
+                this.cmdPriceOption.IsEnabled = false;
+                this.spinnerWait.Visibility = System.Windows.Visibility.Visible;
+                this.spinnerWait.Spin = true;
+            }
+            else
+            {
+                this.spinnerWait.Spin = false;
+                this.spinnerWait.Visibility = System.Windows.Visibility.Collapsed;
+                this.cmdPriceOption.IsEnabled = true;
+            }
         }
 
 	}//class
