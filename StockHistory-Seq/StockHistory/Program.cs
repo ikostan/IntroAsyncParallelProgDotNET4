@@ -81,20 +81,29 @@ namespace StockHistory
                 });
 
 				// Standard deviation:
-				double sum = 0.0;
+				double sum = 0.0, stddev = 0.0, stderr = 0.0;
 
-				foreach (decimal value in data.Prices)
-					sum += Math.Pow(Convert.ToDouble(value - avg), 2.0);
+                Task t_stddev = Task.Factory.StartNew(() => {
 
-				double stddev = Math.Sqrt(sum / N);
+                    //Use local calculated average value instead of waiting for the global value 
+                    decimal local_avg = data.Prices.Average();
 
-				// Standard error:
-				double stderr = stddev / Math.Sqrt(N);
+                    foreach (decimal value in data.Prices)
+                        sum += Math.Pow(Convert.ToDouble(value - local_avg), 2.0);
 
-				//
-				// Output:
-				//
-				Console.WriteLine();
+                    stddev = Math.Sqrt(sum / N);
+                });
+                
+                // Standard error:
+                Task t_stderr = Task.Factory.StartNew(() => {
+                    t_stddev.Wait(); //Wait until task is finished
+                    stderr = stddev / Math.Sqrt(N);
+                });
+
+                //
+                // Output:
+                //
+                Console.WriteLine();
 				Console.WriteLine("** {0} **", symbol);
 				Console.WriteLine("   Data source:  '{0}'", data.DataSource);
 				Console.WriteLine("   Data points:   {0:#,##0}", N);
@@ -107,8 +116,9 @@ namespace StockHistory
 
                 t_Avg.Wait(); //Wait until task is finished
                 Console.WriteLine("   Avg price:    {0:C}", avg);
-
-				Console.WriteLine("   Std dev/err:   {0:0.000} / {1:0.000}", stddev, stderr);
+                
+                t_stderr.Wait(); //Wait until task is finished
+                Console.WriteLine("   Std dev/err:   {0:0.000} / {1:0.000}", stddev, stderr);
 			}
 			catch (Exception ex)
 			{

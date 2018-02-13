@@ -8,6 +8,9 @@ using System.Net;
 using System.Threading;
 using System.Runtime.InteropServices;
 
+using System.Threading.Tasks;
+
+
 
 namespace StockHistory
 {
@@ -52,7 +55,7 @@ namespace StockHistory
 		public static StockData GetHistoricalData(string symbol, int numYearsOfHistory)
 		{
 			//
-			// If we have an internet connection, download data live, otherwise check the cache
+			// If we have an INTERNET connection, download data live, otherwise check the cache
 			// and see if we have the data available...
 			//
 			if (IsConnectedToInternet())
@@ -63,7 +66,7 @@ namespace StockHistory
 
 
 		/// <summary>
-		/// Tries to read stock data from file cache, presumably because internet is not available.
+		/// Tries to read stock data from file cache, presumably because Internet is not available.
 		/// 
 		/// NOTE: file cache is a sub-folder "\cache" under the .exe.  The assumption is that it
 		/// holds CSV files from http://finance.yahoo.com.
@@ -145,7 +148,8 @@ namespace StockHistory
 		/// Downloads data from Yahoo.
 		/// </summary>
 		private static StockData GetDataFromYahoo(string symbol, int numYearsOfHistory)
-		{
+        //private static Task GetDataFromYahoo(string symbol, int numYearsOfHistory)
+        {
 			//
 			// finance.yahoo.com, data format:
 			//
