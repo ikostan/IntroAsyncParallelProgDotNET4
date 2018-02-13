@@ -73,6 +73,9 @@ namespace AsianOptions
 
             string result = null;
 
+            
+            //Following approach is for .Net v4.0. The new .Net versin has much better approach
+
             //Create a separate task
             Task T = new Task(() =>
             {
@@ -85,7 +88,7 @@ namespace AsianOptions
                 //
                 // Display the results (UI thread):
                 //
-                this.lstPrices.Items.Insert(0, result);
+                lstPrices.Items.Insert(0, result);
 
                 ButtonToggle();
             },
