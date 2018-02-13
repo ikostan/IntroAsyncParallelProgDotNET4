@@ -60,7 +60,7 @@ namespace AsianOptions
 		private void cmdPriceOption_Click(object sender, RoutedEventArgs e)
 		{
             count++;
-            lblCount.Content = count.ToString();
+            this.lblCount.Content = count.ToString();
 
             //ButtonToggle();
 
@@ -100,7 +100,7 @@ namespace AsianOptions
                 lstPrices.Items.Insert(0, result);
 
                 count--;
-                lblCount.Content = count.ToString();
+                this.lblCount.Content = count.ToString();
 
                 if (count == 0)
                 {
