@@ -36,9 +36,26 @@ namespace StockHistory
         [DllImport("wininet.dll")]
         private extern static bool InternetGetConnectedState(out int Description, int ReservedValue);
 
+        /// <summary>
+        /// Starts UnobservedTaskException event handler
+        /// </summary>
+        static DownloadData()
+        {
+            TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
+        }
 
         /// <summary>
-        /// C# callable method to check internet access
+        /// Handle unobserved exceptions
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private static void TaskScheduler_UnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
+        {
+            e.SetObserved(); //Observe / ignore exception
+        }
+
+        /// <summary>
+        /// C# callable method to check Internet access
         /// </summary>
         public static bool IsConnectedToInternet()
         {
@@ -164,7 +181,7 @@ namespace StockHistory
                 if (finished.Exception != null)
                 {
                     Console.WriteLine("\nError: {0}", finished.Exception.InnerException.Message);
-                    tasks = tasks.Where((t) => t != finished).ToArray();
+                    tasks = tasks.Where((t) => t != finished).ToArray(); //Remove the task from the array
                 }
                 else
                 {
