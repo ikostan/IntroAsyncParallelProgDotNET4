@@ -97,13 +97,19 @@ namespace StockHistory
                     return Math.Sqrt(sum / N);
                 });
 
-                double stddev = t_stddev.Result;
+               // double stddev = t_stddev.Result;
 
                 // Standard error:
                 Task<double> t_stderr = Task.Factory.StartNew(() => {
-                    t_stddev.Wait(); //Wait until task is finished
-                    return stddev / Math.Sqrt(N);
+                    //t_stddev.Wait(); //Wait until task is finished
+                    return t_stddev.Result / Math.Sqrt(N);
                 });
+
+                //Array of tasks
+                Task[] tasks = { t_Min, t_Max, t_Avg, t_stddev, t_stderr };
+
+                //Wait for completion of all tasks
+                Task.WaitAll(tasks);
 
                 //
                 // Output:
@@ -122,8 +128,8 @@ namespace StockHistory
                 //t_Avg.Wait(); //Wait until task is finished
                 Console.WriteLine("   Avg price:    {0:C}", t_Avg.Result);
                 
-                t_stderr.Wait(); //Wait until task is finished
-                Console.WriteLine("   Std dev/err:   {0:0.000} / {1:0.000}", stddev, t_stderr.Result);
+                //t_stderr.Wait(); //Wait until task is finished
+                Console.WriteLine("   Std dev/err:   {0:0.000} / {1:0.000}", t_stddev.Result, t_stderr.Result);
 			}
 			catch (Exception ex)
 			{
