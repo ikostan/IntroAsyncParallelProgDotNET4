@@ -97,12 +97,13 @@ namespace StockHistory
                     return Math.Sqrt(sum / N);
                 });
 
-               // double stddev = t_stddev.Result;
+                // double stddev = t_stddev.Result;
 
                 // Standard error:
-                Task<double> t_stderr = Task.Factory.StartNew(() => {
+                //Task<double> t_stderr = Task.Factory.StartNew(() => {
+                Task<double> t_stderr = t_stddev.ContinueWith((t) => {
                     //t_stddev.Wait(); //Wait until task is finished
-                    return t_stddev.Result / Math.Sqrt(N);
+                    return t.Result / Math.Sqrt(N);
                 });
 
                 //Array of tasks
