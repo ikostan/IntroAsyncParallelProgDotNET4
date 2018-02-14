@@ -59,11 +59,18 @@ namespace StockHistory
 		/// <param name="numYearsOfHistory">years of history > 0, e.g. 10</param>
 		private static void ProcessStockSymbol(string symbol, int numYearsOfHistory)
 		{
-			try
-			{
-				StockData data = DownloadData.GetHistoricalData(symbol, numYearsOfHistory);
+            try
+            {
+                //Create .Net exception
+                //Task t_error = Task.Factory.StartNew(() =>
+                //{
+                //    int i = 0;
+                //    int j = 1000 / i;
+                //});
 
-				int N = data.Prices.Count;
+                StockData data = DownloadData.GetHistoricalData(symbol, numYearsOfHistory);
+
+                int N = data.Prices.Count;
 
                 //decimal min = 0, max = 0, avg = 0;
 
@@ -82,8 +89,8 @@ namespace StockHistory
                     return data.Prices.Average();
                 });
 
-				// Standard deviation:
-				//double sum = 0.0, stddev = 0.0, stderr = 0.0;
+                // Standard deviation:
+                //double sum = 0.0, stddev = 0.0, stderr = 0.0;
 
                 Task<double> t_stddev = Task.Factory.StartNew(() => {
 
@@ -107,7 +114,7 @@ namespace StockHistory
                 });
 
                 //Array of tasks
-                Task[] tasks = { t_Min, t_Max, t_Avg, t_stddev, t_stderr };
+                Task[] tasks = { t_Min, t_Max, t_Avg, t_stddev, t_stderr};
 
                 //Wait for completion of all tasks
                 Task.WaitAll(tasks);
@@ -116,28 +123,41 @@ namespace StockHistory
                 // Output:
                 //
                 Console.WriteLine();
-				Console.WriteLine("** {0} **", symbol);
-				Console.WriteLine("   Data source:  '{0}'", data.DataSource);
-				Console.WriteLine("   Data points:   {0:#,##0}", N);
+                Console.WriteLine("** {0} **", symbol);
+                Console.WriteLine("   Data source:  '{0}'", data.DataSource);
+                Console.WriteLine("   Data points:   {0:#,##0}", N);
 
                 //t_Min.Wait(); //Wait until task is finished
-				Console.WriteLine("   Min price:    {0:C}", t_Min.Result);
+                Console.WriteLine("   Min price:    {0:C}", t_Min.Result);
 
                 //t_Max.Wait(); //Wait until task is finished
                 Console.WriteLine("   Max price:    {0:C}", t_Max.Result);
 
                 //t_Avg.Wait(); //Wait until task is finished
                 Console.WriteLine("   Avg price:    {0:C}", t_Avg.Result);
-                
+
                 //t_stderr.Wait(); //Wait until task is finished
                 Console.WriteLine("   Std dev/err:   {0:0.000} / {1:0.000}", t_stddev.Result, t_stderr.Result);
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine();
-				Console.WriteLine("** {0} **", symbol);
-				Console.WriteLine("Error: {0}", ex.Message);
-			}
+            }
+            catch (AggregateException ae)
+            {
+                Console.WriteLine();
+                //Console.WriteLine("Tasking Error: {0}", ae.InnerException.Message);
+
+                //Flatten all exceptions since there could be many of them
+                ae = ae.Flatten();
+
+                foreach (var err in ae.InnerExceptions)
+                {
+                    Console.WriteLine("Tasking Error: {0}", err.Message);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine();
+                Console.WriteLine("** {0} **", symbol);
+                Console.WriteLine("Error: {0}", ex.Message);
+            }
 		}
 
 
