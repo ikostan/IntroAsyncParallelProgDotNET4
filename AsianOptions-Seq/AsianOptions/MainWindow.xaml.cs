@@ -54,10 +54,18 @@ namespace AsianOptions
 			}
 		}
 
-		/// <summary>
-		/// Main button to run the simulation.
+        /// <summary>
+		/// Saves the contents of the list box.
 		/// </summary>
-		private void cmdPriceOption_Click(object sender, RoutedEventArgs e)
+		private void mnuFileCancel_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        /// <summary>
+        /// Main button to run the simulation.
+        /// </summary>
+        private void cmdPriceOption_Click(object sender, RoutedEventArgs e)
 		{
             count++;
             this.lblCount.Content = count.ToString();

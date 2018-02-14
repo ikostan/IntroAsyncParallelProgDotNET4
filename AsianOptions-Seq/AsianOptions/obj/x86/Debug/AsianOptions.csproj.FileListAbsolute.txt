@@ -11,3 +11,4 @@ C:\Users\superadmin\Desktop\C#\IntroAsyncParallelProgDotNET4\AsianOptions-Seq\As
 C:\Users\superadmin\Desktop\C#\IntroAsyncParallelProgDotNET4\AsianOptions-Seq\AsianOptions\obj\x86\Debug\AsianOptions.csproj.CoreCompileInputs.cache
 C:\Users\superadmin\Desktop\C#\IntroAsyncParallelProgDotNET4\AsianOptions-Seq\AsianOptions\obj\x86\Debug\AsianOptions.exe
 C:\Users\superadmin\Desktop\C#\IntroAsyncParallelProgDotNET4\AsianOptions-Seq\AsianOptions\obj\x86\Debug\AsianOptions.pdb
+C:\Users\superadmin\Desktop\C#\IntroAsyncParallelProgDotNET4\AsianOptions-Seq\AsianOptions\obj\x86\Debug\AsianOptions.csprojResolveAssemblyReference.cache
