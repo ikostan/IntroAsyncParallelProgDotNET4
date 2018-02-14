@@ -65,19 +65,21 @@ namespace StockHistory
 
 				int N = data.Prices.Count;
 
-                decimal min = 0, max = 0, avg = 0;
+                //decimal min = 0, max = 0, avg = 0;
 
                 //Create parallel tasks
-                Task t_Min = Task.Factory.StartNew(() => {
-                    min = data.Prices.Min();
+                Task<decimal> t_Min = Task.Factory.StartNew(() => {
+                    return data.Prices.Min();
                 });
 
-                Task t_Max = Task.Factory.StartNew(() => {
-                    max = data.Prices.Max();
+                //decimal min = t_Min.Result;
+
+                Task<decimal> t_Max = Task.Factory.StartNew(() => {
+                    return data.Prices.Max();
                 });
 
-                Task t_Avg = Task.Factory.StartNew(() => {
-                    avg = data.Prices.Average();
+                Task<decimal> t_Avg = Task.Factory.StartNew(() => {
+                    return data.Prices.Average();
                 });
 
 				// Standard deviation:
@@ -108,14 +110,14 @@ namespace StockHistory
 				Console.WriteLine("   Data source:  '{0}'", data.DataSource);
 				Console.WriteLine("   Data points:   {0:#,##0}", N);
 
-                t_Min.Wait(); //Wait until task is finished
-				Console.WriteLine("   Min price:    {0:C}", min);
+                //t_Min.Wait(); //Wait until task is finished
+				Console.WriteLine("   Min price:    {0:C}", t_Min.Result);
 
-                t_Max.Wait(); //Wait until task is finished
-                Console.WriteLine("   Max price:    {0:C}", max);
+                //t_Max.Wait(); //Wait until task is finished
+                Console.WriteLine("   Max price:    {0:C}", t_Max.Result);
 
-                t_Avg.Wait(); //Wait until task is finished
-                Console.WriteLine("   Avg price:    {0:C}", avg);
+                //t_Avg.Wait(); //Wait until task is finished
+                Console.WriteLine("   Avg price:    {0:C}", t_Avg.Result);
                 
                 t_stderr.Wait(); //Wait until task is finished
                 Console.WriteLine("   Std dev/err:   {0:0.000} / {1:0.000}", stddev, stderr);
