@@ -1,7 +1,6 @@
 C:\Users\superadmin\Desktop\C#\IntroAsyncParallelProgDotNET4\AsianOptions-Seq\AsianOptions\bin\Debug\AsianOptions.exe.config
 C:\Users\superadmin\Desktop\C#\IntroAsyncParallelProgDotNET4\AsianOptions-Seq\AsianOptions\bin\Debug\AsianOptions.exe
 C:\Users\superadmin\Desktop\C#\IntroAsyncParallelProgDotNET4\AsianOptions-Seq\AsianOptions\bin\Debug\AsianOptions.pdb
-C:\Users\superadmin\Desktop\C#\IntroAsyncParallelProgDotNET4\AsianOptions-Seq\AsianOptions\obj\x86\Debug\AsianOptions.csprojResolveAssemblyReference.cache
 C:\Users\superadmin\Desktop\C#\IntroAsyncParallelProgDotNET4\AsianOptions-Seq\AsianOptions\obj\x86\Debug\MainWindow.baml
 C:\Users\superadmin\Desktop\C#\IntroAsyncParallelProgDotNET4\AsianOptions-Seq\AsianOptions\obj\x86\Debug\MainWindow.g.cs
 C:\Users\superadmin\Desktop\C#\IntroAsyncParallelProgDotNET4\AsianOptions-Seq\AsianOptions\obj\x86\Debug\App.g.cs

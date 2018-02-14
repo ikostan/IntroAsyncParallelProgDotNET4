@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace AsianOptions
 {
@@ -27,7 +28,8 @@ namespace AsianOptions
 		/// <returns>The calculated value for an option with the given 
 		/// statistical context using the Monte Carlo method.</returns>
 		///
-		public static double Simulation(Random rand, 
+		public static double Simulation(CancellationToken ct, 
+                                        Random rand, 
                                         double initial, 
                                         double exercise, 
                                         double up, 
@@ -45,6 +47,12 @@ namespace AsianOptions
 			// Run simulations:
 			for (int index = 0; index < sims; index++)
 			{
+                //Check if the user wants to cancel the task
+                if (ct.IsCancellationRequested)
+                {
+                    ct.ThrowIfCancellationRequested();
+                }
+
 				// Generate one path:
 				double sumPricePath = initial;
 				double previous = initial;

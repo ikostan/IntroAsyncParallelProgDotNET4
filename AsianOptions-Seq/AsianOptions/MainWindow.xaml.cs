@@ -13,7 +13,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO;
 using System.Threading.Tasks;
-
+using System.Threading;
 
 namespace AsianOptions
 {
@@ -81,14 +81,13 @@ namespace AsianOptions
             //
 
             string result = null;
-
             
             //Following approach is for .Net v4.0. The new .Net versin has much better approach
 
             //Create a separate task
             Task T = new Task(() =>
             {
-                CalculationTask(initial, exercise, up, down, interest, periods, sims, out result);
+                result = CalculationTask(initial, exercise, up, down, interest, periods, sims);
             });
 
             //Task for UI thread
@@ -127,27 +126,38 @@ namespace AsianOptions
         /// <param name="periods"></param>
         /// <param name="sims"></param>
         /// <param name="result"></param>
-        private void CalculationTask(double initial, 
+        private string CalculationTask(double initial, 
                                     double exercise, 
                                     double up, 
                                     double down, 
                                     double interest, 
                                     long periods, 
-                                    long sims, 
-                                    out string result) {
+                                    long sims) {
 
-            Random rand = new Random();
-            int start = System.Environment.TickCount;
+            //Cancellation token
+            CancellationTokenSource cts = new CancellationTokenSource();
+            CancellationToken token = cts.Token;
 
-            //The most heavy function
-            double price = AsianOptionsPricing.Simulation(rand, initial, exercise, up, down, interest, periods, sims);
+            Task<string> T = Task.Factory.StartNew(() =>
+            {
+                Random rand = new Random();
+                int start = System.Environment.TickCount;
 
-            int stop = System.Environment.TickCount;
+                //The most heavy function
+                double price = AsianOptionsPricing.Simulation(token, rand, initial, exercise, up, down, interest, periods, sims);
 
-            double elapsedTimeInSecs = (stop - start) / 1000.0;
+                int stop = System.Environment.TickCount;
 
-            result = string.Format("{0:C}  [{1:#,##0.00} secs]",
-                price, elapsedTimeInSecs);
+                double elapsedTimeInSecs = (stop - start) / 1000.0;
+
+                string result = string.Format("{0:C}  [{1:#,##0.00} secs]",
+                    price, elapsedTimeInSecs);
+                return result;
+            },
+            token
+            );
+
+            return T.Result;
         }
 
         /// <summary>

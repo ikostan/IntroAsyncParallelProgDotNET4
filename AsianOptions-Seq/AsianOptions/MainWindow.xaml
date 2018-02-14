@@ -15,7 +15,8 @@
 
 			<MenuItem Header="_File" Name="mnuFile" Background="LightGreen">
 				<MenuItem Header="_Save Results" Name="mnuFileSave" Click="mnuFileSave_Click" />
-				<Separator />
+                <MenuItem Header="_Cancel" Name="mnuCancel" Click="mnuCancel_Click" />
+                <Separator />
 				<MenuItem Header="E_xit" Name="mnuFileExit" Click="mnuFileExit_Click" />
 			</MenuItem>
 		</Menu>
