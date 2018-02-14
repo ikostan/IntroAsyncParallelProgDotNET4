@@ -104,43 +104,54 @@ namespace StockHistory
 		}
 
 
-		/// <summary>
-		/// Tries to download historial data from 3 different web sites.  For demo purposes, we
-		/// do this synchronously --- if the first fails, we fire off a 2nd request, and so on.  
-		/// Sites used:  nasdaq, yahoo, and msn (although msn only provides a year of weekly data, 
-		/// so others are preferred).
-		/// </summary>
-		/// <param name="symbol"></param>
-		/// <param name="numYearsOfHistory"></param>
-		/// <returns></returns>
-		private static StockData GetDataFromInternet(string symbol, int numYearsOfHistory)
-		{
-			//
-			// Retrieve data one site at a time, returning the first one that succeeds:
-			//
-			try
-			{
-				StockData yahoo = GetDataFromYahoo(symbol, numYearsOfHistory);
-				return yahoo;
-			}
-			catch { /*ignore, try next one*/ }
+        /// <summary>
+        /// Tries to download historial data from 3 different web sites.  For demo purposes, we
+        /// do this synchronously --- if the first fails, we fire off a 2nd request, and so on.  
+        /// Sites used:  nasdaq, yahoo, and msn (although msn only provides a year of weekly data, 
+        /// so others are preferred).
+        /// </summary>
+        /// <param name="symbol"></param>
+        /// <param name="numYearsOfHistory"></param>
+        /// <returns></returns>
+        private static StockData GetDataFromInternet(string symbol, int numYearsOfHistory)
+        {
+            //
+            // Retrieve data one site at a time, returning the first one that succeeds:
+            //
+            //try
+            //{
+            //	StockData yahoo = GetDataFromYahoo(symbol, numYearsOfHistory);
+            //	return yahoo;
+            //}
+            //catch { /*ignore, try next one*/ }
 
-			try
-			{
-				StockData nasdaq = GetDataFromNasdaq(symbol, numYearsOfHistory);
-				return nasdaq;
-			}
-			catch { /*ignore, try next one*/ }
+            //try
+            //{
+            //	StockData nasdaq = GetDataFromNasdaq(symbol, numYearsOfHistory);
+            //	return nasdaq;
+            //}
+            //catch { /*ignore, try next one*/ }
 
-			try
-			{
-				StockData msn = GetDataFromMsn(symbol, numYearsOfHistory);
-				return msn;
-			}
-			catch { /*ignore, try next one*/ }
+            //try
+            //{
+            //	StockData msn = GetDataFromMsn(symbol, numYearsOfHistory);
+            //	return msn;
+            //}
+            //catch { /*ignore, try next one*/ }
+
+            //Add all tasks into array of tasks
+            Task<StockData>[] tasks = {
+                Task.Factory.StartNew(() => { return GetDataFromYahoo(symbol, numYearsOfHistory); }),
+                Task.Factory.StartNew(() => { return GetDataFromNasdaq(symbol, numYearsOfHistory); }),
+                Task.Factory.StartNew(() => { return GetDataFromMsn(symbol, numYearsOfHistory); }),
+            };
+
+            //Return first completed task
+            int i = Task.WaitAny(tasks);
+            return tasks[i].Result;
 
 			// all failed: 
-			throw new ApplicationException("all web sites failed");
+			//throw new ApplicationException("all web sites failed");
 		}
 
 
